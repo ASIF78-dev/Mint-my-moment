@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Mint My Moment - turn your favorite moments into on-chain collectibles in seconds.">
+    <title>Mint My Moment</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="container nav">
+        <a href="#" class="brand" aria-label="Mint My Moment home">
+          <span class="brand-mark">✦</span>
+          <span class="brand-text">Mint My Moment</span>
+        </a>
+        <div class="nav-actions">
+          <a href="#uploader" class="btn btn-ghost">Get Started</a>
+          <a href="#login" class="btn btn-ghost" id="navLogin">Login</a>
+          <a href="#profile" class="btn btn-ghost" id="navProfile">Profile</a>
+          <select id="networkSelect" class="select" aria-label="Select network">
+            <option value="" selected disabled>Select network</option>
+            <option value="sepolia">Sepolia (Testnet)</option>
+            <option value="mumbai">Mumbai (Testnet)</option>
+            <option value="baseSepolia">Base Sepolia (Testnet)</option>
+            <option value="ethereum">Ethereum</option>
+            <option value="polygon">Polygon</option>
+            <option value="base">Base</option>
+            <option value="solana">Solana</option>
+          </select>
+          <button class="btn btn-ghost" id="addSepoliaBtn" type="button">Add Sepolia</button>
+          <button class="btn btn-secondary" id="connectBtn" type="button">Connect Wallet</button>
+          
+          
+          <div id="walletModal" class="modal" style="display: none;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3>Connect Wallet</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p>Choose your preferred wallet to connect:</p>
+                <div class="wallet-options">
+                  <button class="wallet-option" data-wallet="metamask">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0Y2ODUxRCIvPgo8cGF0aCBkPSJNMTYgNkwxMCAxMkgxMlYyMEgxNlYxMkgxOFYxMEgxNlY2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="MetaMask">
+                    <div>
+                      <strong>MetaMask</strong>
+                      <small>Connect using MetaMask extension</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="bybit">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzAwMDAwMCIvPgo8cGF0aCBkPSJNMTYgOEwxMiAxMkgxNFYyMEgxOFYxMkgyMFY4SDE2WiIgZmlsbD0iI0Y1QzAwMCIvPgo8L3N2Zz4=" alt="Bybit">
+                    <div>
+                      <strong>Bybit Wallet</strong>
+                      <small>Connect using Bybit extension</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="coinbase">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzAwNTJGRiIvPgo8cGF0aCBkPSJNMTYgMTBMMTQgMTJIMThWMjBIMTZWMTAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="Coinbase">
+                    <div>
+                      <strong>Coinbase Wallet</strong>
+                      <small>Connect using Coinbase extension</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="walletconnect">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzMzOTZGRiIvPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI4IiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=" alt="WalletConnect">
+                    <div>
+                      <strong>WalletConnect</strong>
+                      <small>Connect using mobile wallet</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="brave">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0ZGMjUwMCIvPgo8cGF0aCBkPSJNMTYgMTBMMTQgMTJIMThWMjBIMTZWMTAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="Brave">
+                    <div>
+                      <strong>Brave Wallet</strong>
+                      <small>Connect using Brave browser</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="trust">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzMzNzVGRiIvPgo8cGF0aCBkPSJNMTYgMTBMMTQgMTJIMThWMjBIMTZWMTAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="Trust Wallet">
+                    <div>
+                      <strong>Trust Wallet</strong>
+                      <small>Connect using Trust Wallet</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="rainbow">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0ibGluZWFyLWdyYWRpZW50KDEzNWRlZywgIzMzOTZGRiwgIzMzRkY5OSwgI0ZGRjMzMykiLz4KPC9zdmc+" alt="Rainbow">
+                    <div>
+                      <strong>Rainbow</strong>
+                      <small>Connect using Rainbow wallet</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="phantom">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzQxM0E5NiIvPgo8cGF0aCBkPSJNMTYgMTBMMTQgMTJIMThWMjBIMTZWMTAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="Phantom">
+                    <div>
+                      <strong>Phantom</strong>
+                      <small>Connect using Phantom (Solana)</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="ledger">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzAwMDAwMCIvPgo8cGF0aCBkPSJNMTYgMTBMMTQgMTJIMThWMjBIMTZWMTAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="Ledger">
+                    <div>
+                      <strong>Ledger</strong>
+                      <small>Connect using Ledger hardware wallet</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="tally">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzAwRkY4MCIvPgo8cGF0aCBkPSJNMTYgMTBMMTQgMTJIMThWMjBIMTZWMTAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="Tally">
+                    <div>
+                      <strong>Tally</strong>
+                      <small>Connect using Tally wallet</small>
+                    </div>
+                  </button>
+                  
+                  <button class="wallet-option" data-wallet="binance">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0YzQjkwMCIvPgo8cGF0aCBkPSJNMTYgMTBMMTQgMTJIMThWMjBIMTZWMTAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="Binance">
+                    <div>
+                      <strong>Binance Wallet</strong>
+                      <small>Connect using Binance extension</small>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="navMintBtn" enabled>Mint Now</button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page login-page" id="login" aria-labelledby="login-title" hidden>
+        <div class="container">
+          <h2 id="login-title">Login</h2>
+          <p class="section-subtitle">Sign in with your wallet to personalize your experience.</p>
+          <div class="card" style="padding:16px; margin-top:14px; display:grid; gap:12px;">
+            <p class="muted">We’ll connect your wallet to identify your profile. No transactions are sent without your approval.</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn-primary" id="loginConnectBtn" type="button">Connect Wallet</button>
+              <button class="btn btn-secondary" id="loginDisconnectBtn" type="button">Disconnect</button>
+            </div>
+            <small id="loginStatus" class="muted" aria-live="polite"></small>
+          </div>
+        </div>
+      </section>
+
+      <section class="page profile-page" id="profile" aria-labelledby="profile-title" hidden>
+        <div class="container">
+          <h2 id="profile-title">Your Profile</h2>
+          <div class="card" style="padding:16px; margin-top:14px; display:grid; gap:12px;">
+            <div style="display:grid; gap:6px;">
+              <div><strong>Address:</strong> <span id="profileAddress">Not connected</span></div>
+              <div><strong>Network:</strong> <span id="profileNetwork">—</span></div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn-secondary" id="profileDisconnectBtn" type="button">Disconnect</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <h1>Turn moments into collectibles</h1>
+            <p class="subtitle">Upload a photo or video, customize the details, and mint it on-chain in seconds.</p>
+            <div class="hero-cta">
+              <a href="#uploader" class="btn btn-primary">Create your first mint</a>
+              <a href="#how" class="btn btn-ghost">How it works</a>
+            </div>
+          </div>
+          <div class="hero-card" aria-hidden="true">
+            <div class="card preview-skeleton">
+              <div class="skeleton media"></div>
+              <div class="skeleton title"></div>
+              <div class="skeleton meta"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="uploader-section" id="uploader" aria-labelledby="uploader-title">
+        <div class="container">
+          <h2 id="uploader-title">Upload your moment</h2>
+          <p class="section-subtitle">We support images (PNG, JPG, GIF) and videos (MP4, MOV) up to 25 MB.</p>
+
+          <div class="uploader-grid">
+            <div class="card dropzone" id="dropzone" role="button" tabindex="0" aria-label="Upload a file by clicking or dragging and dropping">
+              <input type="file" id="fileInput" accept="image/*,video/*" aria-label="Choose file" hidden>
+              <div class="dz-content">
+                <div class="dz-icon">⬆️</div>
+                <div class="dz-text">
+                  <strong>Drag & drop</strong> your file here
+                  <span class="muted">or</span>
+                </div>
+                <button class="btn btn-secondary" id="browseBtn" type="button">Browse files</button>
+                <div class="dz-meta" id="fileMeta" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <div class="card preview" id="previewCard" aria-live="polite" aria-busy="false">
+              <div class="preview-media" id="previewMedia"></div>
+              <div class="preview-details">
+                <label class="input">
+                  <span>Title</span>
+                  <input id="titleInput" type="text" placeholder="Sunset over the bay" maxlength="80">
+                </label>
+                <label class="input">
+                  <span>Description</span>
+                  <textarea id="descInput" rows="3" placeholder="Why this moment matters..."></textarea>
+                </label>
+                <div class="row">
+                  <label class="input">
+                    <span>Creator</span>
+                    <input id="creatorInput" type="text" placeholder="Your name or handle">
+                  </label>
+                  <label class="input">
+                    <span>Edition size</span>
+                    <input id="editionInput" type="number" min="1" max="10000" value="1">
+                  </label>
+                </div>
+                <label class="input">
+                  <span>Contract address (EVM)</span>
+                  <input id="contractInput" type="text" placeholder="0x...">
+                </label>
+                <label class="input">
+                  <span>Web3.Storage API token (for IPFS upload)</span>
+                  <input id="web3TokenInput" type="password" placeholder="Paste your API token">
+                </label>
+                <button class="btn btn-primary block" id="mintBtn" disabled>Mint this moment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="how-section" id="how" aria-labelledby="how-title">
+        <div class="container">
+          <h2 id="how-title">How it works</h2>
+          <ol class="steps">
+            <li>
+              <div class="step-icon">1</div>
+              <div class="step-body">
+                <h3>Upload</h3>
+                <p>Drop in your image or video. We'll generate a preview instantly.</p>
+              </div>
+            </li>
+            <li>
+              <div class="step-icon">2</div>
+              <div class="step-body">
+                <h3>Customize</h3>
+                <p>Add a title, description, creator, and pick the edition size.</p>
+              </div>
+            </li>
+            <li>
+              <div class="step-icon">3</div>
+              <div class="step-body">
+                <h3>Mint</h3>
+                <p>Connect a wallet, then mint on your preferred chain (coming soon).</p>
+              </div>
+            </li>
+            <li>
+              <div class="step-icon">4</div>
+              <div class="step-body">
+                <h3>Share</h3>
+                <p>Show off your collectible with a unique link and social card.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="container cta">
+          <div class="cta-text">
+            <h2>Ready to mint your moment?</h2>
+            <p>Upload a file to get started. No blockchain setup required for the demo.</p>
+            <small style="color: var(--muted); margin-top: 8px; display: block;">
+              🔒 Wallet permissions: We only request access to view your address and send transactions. 
+              No funds will be moved without your explicit approval.
+            </small>
+          </div>
+          <a href="#uploader" class="btn btn-primary">Start now</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer">
+        <div class="foot-left">
+          <span class="brand-mark">✦</span>
+          <span class="brand-text">Mint My Moment</span>
+        </div>
+        <div class="foot-right">
+          <a href="#how">How it works</a>
+          <a href="#uploader">Create</a>
+          <a href="mailto:asifalam6793@gmail.com">Contact</a>
+        </div>
+      </div>
+    </footer>
+    <script src="./libs/ethers.umd.min.js"></script>
+    <script src="./contracts.js"></script>
+    <script>
+      
+      window.Web3Storage = {
+        Web3Storage: function(options) {
+          this.token = options.token;
+          this.put = async function(files) {
+            
+            console.log('Mock IPFS upload:', files);
+            return 'mock-cid-' + Date.now();
+          };
+        }
+      };
+    </script>
+    <script src="./script.js" defer></script>
+  </body>
+</html>
