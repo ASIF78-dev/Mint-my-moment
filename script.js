@@ -10,8 +10,6 @@
   const navMintBtn = document.getElementById('navMintBtn');
   const connectBtn = document.getElementById('connectBtn');
   const networkSelect = document.getElementById('networkSelect');
-  const navLogin = document.getElementById('navLogin');
-  const navProfile = document.getElementById('navProfile');
   const addSepoliaBtn = document.getElementById('addSepoliaBtn');
   const walletModal = document.getElementById('walletModal');
   const closeModal = document.getElementById('closeModal');
@@ -32,14 +30,7 @@
     console.error('connectBtn element not found!');
   }
 
-  const loginSection = document.getElementById('login');
-  const profileSection = document.getElementById('profile');
-  const loginConnectBtn = document.getElementById('loginConnectBtn');
-  const loginDisconnectBtn = document.getElementById('loginDisconnectBtn');
-  const loginStatus = document.getElementById('loginStatus');
-  const profileAddress = document.getElementById('profileAddress');
-  const profileNetwork = document.getElementById('profileNetwork');
-  const profileDisconnectBtn = document.getElementById('profileDisconnectBtn');
+  // Login and profile sections removed
 
   function formatBytes(bytes) {
     if (!bytes && bytes !== 0) return '';
@@ -75,44 +66,33 @@
       network: appState.network,
       enabled: enabled
     });
-    mintBtn.disabled = !enabled;
-    navMintBtn.disabled = !enabled;
     
-    // Update button text to show status
+    // Update main mint button
+    if (mintBtn) {
+      mintBtn.disabled = !enabled;
+    }
+    
+    // Show/hide nav mint button based on wallet connection
     if (navMintBtn) {
-      if (enabled) {
-        navMintBtn.textContent = 'Mint Now';
-        navMintBtn.classList.remove('btn-secondary');
-        navMintBtn.classList.add('btn-primary');
+      if (appState.walletConnected) {
+        navMintBtn.style.display = 'inline-flex';
+        navMintBtn.disabled = !enabled;
       } else {
-        navMintBtn.textContent = 'Mint Now';
-        navMintBtn.classList.add('btn-secondary');
-        navMintBtn.classList.remove('btn-primary');
+        navMintBtn.style.display = 'none';
       }
     }
   }
 
   function updateProfileUI() {
-    if (profileAddress) profileAddress.textContent = appState.address ? appState.address : 'Not connected';
-    if (profileNetwork) profileNetwork.textContent = appState.network || '—';
-    if (loginStatus) loginStatus.textContent = appState.walletConnected ? `Connected: ${appState.address}` : 'Not connected';
+    // Profile UI elements removed - this function kept for compatibility
+    console.log('Wallet status:', appState.walletConnected ? `Connected: ${appState.address}` : 'Not connected');
   }
 
   function showPage(hash) {
+    // Navigation simplified - no login/profile sections
     const id = (hash || location.hash || '#').replace('#', '') || '';
-    const sections = [loginSection, profileSection];
-    sections.forEach(function(sec){ if (!sec) return; sec.hidden = true; });
-    switch (id) {
-      case 'login':
-        if (loginSection) loginSection.hidden = false;
-        break;
-      case 'profile':
-        if (profileSection) profileSection.hidden = false;
-        break;
-      default:
-        // fall back to existing sections (hero/uploader already visible by default)
-        break;
-    }
+    console.log('Navigation to:', id);
+    // Main content is always visible
   }
 
   function isVideo(file) {
@@ -650,28 +630,47 @@
     }
   });
 
-  if (loginConnectBtn) loginConnectBtn.addEventListener('click', function(){
-    // Reuse wallet modal flow for consistency
-    if (!appState.walletConnected) { showWalletModal(); }
-  });
-  if (loginDisconnectBtn) loginDisconnectBtn.addEventListener('click', function(){
-    appState.walletConnected = false;
-    appState.address = '';
-    connectBtn.textContent = 'Connect Wallet';
-    connectBtn.classList.add('btn-secondary');
-    connectBtn.classList.remove('btn-primary');
-    updateMintEnabled();
-    updateProfileUI();
-  });
-  if (profileDisconnectBtn) profileDisconnectBtn.addEventListener('click', function(){
-    appState.walletConnected = false;
-    appState.address = '';
-    connectBtn.textContent = 'Connect Wallet';
-    connectBtn.classList.add('btn-secondary');
-    connectBtn.classList.remove('btn-primary');
-    updateMintEnabled();
-    updateProfileUI();
-  });
+  // Login and profile event listeners removed
+
+  // Mobile Menu Toggle Functionality
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const navMenu = document.getElementById('navMenu');
+  
+  if (mobileMenuBtn && navMenu) {
+    mobileMenuBtn.addEventListener('click', function() {
+      // Toggle active classes
+      mobileMenuBtn.classList.toggle('active');
+      navMenu.classList.toggle('active');
+      
+      // Prevent body scroll when menu is open
+      if (navMenu.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Nav links removed - menu will close on outside click or manual toggle
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!mobileMenuBtn.contains(event.target) && !navMenu.contains(event.target)) {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Close menu on window resize if desktop
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 768) {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
   } catch (error) {
     console.error('JavaScript error in Mint My Moment:', error);
     console.error('Error stack:', error.stack);

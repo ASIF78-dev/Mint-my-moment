@@ -17,22 +17,44 @@
           <span class="brand-mark">✦</span>
           <span class="brand-text">Mint My Moment</span>
         </a>
-        <div class="nav-actions">
-          <a href="#uploader" class="btn btn-ghost">Get Started</a>
-          <a href="#login" class="btn btn-ghost" id="navLogin">Login</a>
-          <a href="#profile" class="btn btn-ghost" id="navProfile">Profile</a>
-          <select id="networkSelect" class="select" aria-label="Select network">
-            <option value="" selected disabled>Select network</option>
-            <option value="sepolia">Sepolia (Testnet)</option>
-            <option value="mumbai">Mumbai (Testnet)</option>
-            <option value="baseSepolia">Base Sepolia (Testnet)</option>
-            <option value="ethereum">Ethereum</option>
-            <option value="polygon">Polygon</option>
-            <option value="base">Base</option>
-            <option value="solana">Solana</option>
-          </select>
-          <button class="btn btn-ghost" id="addSepoliaBtn" type="button">Add Sepolia</button>
-          <button class="btn btn-secondary" id="connectBtn" type="button">Connect Wallet</button>
+        
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        
+        <div class="nav-menu" id="navMenu">
+          <!-- Network & Wallet Section -->
+          <div class="nav-actions">
+            <div class="network-selector">
+              <span class="network-label">Network:</span>
+              <select id="networkSelect" class="select network-select" aria-label="Select network">
+                <option value="" selected disabled>Select network</option>
+                <option value="sepolia">🔧 Sepolia (Testnet)</option>
+                <option value="mumbai">🔧 Mumbai (Testnet)</option>
+                <option value="baseSepolia">🔧 Base Sepolia (Testnet)</option>
+                <option value="ethereum">⚡ Ethereum</option>
+                <option value="polygon">🟣 Polygon</option>
+                <option value="base">🔵 Base</option>
+                <option value="solana">🌟 Solana</option>
+              </select>
+            </div>
+            
+            <div class="wallet-actions">
+              <button class="btn btn-ghost btn-small" id="addSepoliaBtn" type="button">Add Sepolia</button>
+              <button class="btn btn-primary wallet-connect-btn" id="connectBtn" type="button">
+                <span class="wallet-icon">👛</span>
+                <span class="wallet-text">Connect Wallet</span>
+              </button>
+              <button class="btn btn-primary mint-now-btn" id="navMintBtn" type="button" style="display: none;">
+                <span class="mint-icon">⚡</span>
+                <span class="mint-text">Mint Now</span>
+              </button>
+            </div>
+          </div>
+        </div>
           
           
           <div id="walletModal" class="modal" style="display: none;">
@@ -44,11 +66,12 @@
               <div class="modal-body">
                 <p>Choose your preferred wallet to connect:</p>
                 <div class="wallet-options">
-                  <button class="wallet-option" data-wallet="metamask">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0Y2ODUxRCIvPgo8cGF0aCBkPSJNMTYgNkwxMCAxMkgxMlYyMEgxNlYxMkgxOFYxMEgxNlY2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="MetaMask">
+                  <button class="wallet-option wallet-option-featured" data-wallet="metamask">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iMTYiIGZpbGw9IiNGNjg1MUQiLz4KPHN2ZyB4PSI0IiB5PSI0IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+CjxwYXRoIGQ9Ik0yMC4zIDEuNEwxMi44IDcuMkwxNC4zIDMuOUwyMC4zIDEuNFoiIGZpbGw9IiNFMjc2MUIiLz4KPHN2ZyB4PSI0IiB5PSI0IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+CjxwYXRoIGQ9Ik0zLjcgMS40TDExLjIgNy4yTDkuNyAzLjlMMy43IDEuNFoiIGZpbGw9IiNFNDc2MUIiLz4KPHN2ZyB4PSI0IiB5PSI0IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+CjxwYXRoIGQ9Ik0xNy4yIDEyLjNMMTUuNSAxNS4yTDE5LjcgMTYuM0wyMC44IDEyLjRMMTcuMiAxMi4zWiIgZmlsbD0iI0U0NzYxQiIvPgo8L3N2Zz4KPC9zdmc+Cjwvc3ZnPgo8L3N2Zz4=" alt="MetaMask">
                     <div>
-                      <strong>MetaMask</strong>
-                      <small>Connect using MetaMask extension</small>
+                      <strong>🦊 MetaMask</strong>
+                      <small>Most popular Ethereum wallet</small>
+                      <span class="recommended-badge">Recommended</span>
                     </div>
                   </button>
                   
